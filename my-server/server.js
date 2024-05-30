@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const path = require('path'); // Import the path module
+const path = require('path'); 
 const Book = require('./models/Book');
 
 const app = express();
@@ -11,10 +11,9 @@ app.use(cors({
   origin: 'http://localhost:8080' 
 }));
 
-// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Conectare la MongoDB
+
 mongoose.connect('mongodb://localhost:27017/bookstore', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -22,7 +21,7 @@ mongoose.connect('mongodb://localhost:27017/bookstore', {
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log(err));
 
-// READ All Books
+
 app.get('/books', async (req, res) => {
     try {
         const books = await Book.find();
@@ -32,7 +31,7 @@ app.get('/books', async (req, res) => {
     }
 });
 
-// CREATE a New Book
+
 app.post('/books', async (req, res) => {
     try {
         const newBook = new Book(req.body);
@@ -43,7 +42,7 @@ app.post('/books', async (req, res) => {
     }
 });
 
-// READ a Single Book by Title
+
 app.get('/books/:title', async (req, res) => {
     try {
         const book = await Book.findOne({ title: req.params.title });
@@ -56,7 +55,6 @@ app.get('/books/:title', async (req, res) => {
     }
 });
 
-// UPDATE a Book by Title
 app.put('/books/:title', async (req, res) => {
     try {
         const updatedBook = await Book.findOneAndUpdate({ title: req.params.title }, req.body, { new: true });
@@ -69,7 +67,7 @@ app.put('/books/:title', async (req, res) => {
     }
 });
 
-// DELETE a Book by Title
+
 app.delete('/books/:title', async (req, res) => {
     try {
         const deletedBook = await Book.findOneAndDelete({ title: req.params.title });
@@ -82,6 +80,6 @@ app.delete('/books/:title', async (req, res) => {
     }
 });
 
-// Setare port și pornire server
+
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
